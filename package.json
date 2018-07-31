@@ -1,0 +1,55 @@
+{
+  "_args": [
+    [
+      "react-native-zendesk-support@1.0.9",
+      "/Users/austinwest/sites/littlebird/LittleBirdNative"
+    ]
+  ],
+  "_from": "react-native-zendesk-support@1.0.9",
+  "_id": "react-native-zendesk-support@1.0.9",
+  "_inBundle": false,
+  "_integrity": "sha512-EFd9I3B6GzV2BkPV3/xPbUu4A8vnxqwPD+uOs+Ez4iB/t/asDDdE4v3dIEOEbIvtRwhVlkjp7vDkS2Q0nctXzg==",
+  "_location": "/react-native-zendesk-support",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "version",
+    "registry": true,
+    "raw": "react-native-zendesk-support@1.0.9",
+    "name": "react-native-zendesk-support",
+    "escapedName": "react-native-zendesk-support",
+    "rawSpec": "1.0.9",
+    "saveSpec": null,
+    "fetchSpec": "1.0.9"
+  },
+  "_requiredBy": [
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/react-native-zendesk-support/-/react-native-zendesk-support-1.0.9.tgz",
+  "_spec": "1.0.9",
+  "_where": "/Users/austinwest/sites/littlebird/LittleBirdNative",
+  "author": {
+    "name": "robertsheao"
+  },
+  "bugs": {
+    "url": "https://github.com/robertsheao/react-native-zendesk-support/issues"
+  },
+  "description": "React Native Wrapper around Zendesk Support",
+  "homepage": "https://github.com/robertsheao/react-native-zendesk-support#readme",
+  "keywords": [
+    "zendesk",
+    "support",
+    "react-native",
+    "react",
+    "ios",
+    "android",
+    "react-component"
+  ],
+  "license": "MIT",
+  "main": "index.js",
+  "name": "react-native-zendesk-support",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/robertsheao/react-native-zendesk-support.git"
+  },
+  "version": "1.0.9"
+}
