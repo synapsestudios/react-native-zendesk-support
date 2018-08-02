@@ -1,5 +1,5 @@
 {
-  "name": "react-native-zendesk-support",
+  "name": "@synapsestudios/react-native-zendesk-support",
   "version": "1.0.0",
   "description": "React Native Wrapper around Zendesk Support",
   "main": "index.js",
