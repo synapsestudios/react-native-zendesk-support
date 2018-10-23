@@ -11,7 +11,7 @@ This has only been tested to work with React Native 0.47, probably works in earl
 
 ### Installing via RNPM (Common)
 ```
-react-native link react-native-zendesk-support
+react-native link @synapsestudios/react-native-zendesk-support
 ```
 
 ### Installing via Cocoapods (Not Common)
@@ -97,7 +97,7 @@ Personally, I use the CocoaPods implementation described in their documentation.
 
 #### Import the module
 ```js
-import ZendeskSupport from 'react-native-zendesk-support';
+import ZendeskSupport from '@synapsestudios/react-native-zendesk-support';
 ```
 
 #### Initialize Zendesk
