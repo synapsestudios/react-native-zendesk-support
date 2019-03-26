@@ -1,3 +1,7 @@
+## [v1.0.2](https://github.com/synapsestudios/react-native-zendesk-support/compare/v1.0.1...v1.0.2) - 2019-03-26
+### Fixed
+- [#23](https://github.com/synapsestudios/react-native-zendesk-support/issues/23) Fixed conflicting NPM version number
+
 ## [v1.0.1](https://github.com/synapsestudios/react-native-zendesk-support/compare/v1.0.0...v1.0.1) - 2019-03-26
 ### Fixed
 - [#15](https://github.com/synapsestudios/react-native-zendesk-support/issues/15) `pod install` fails
