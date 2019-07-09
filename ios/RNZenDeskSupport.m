@@ -13,6 +13,8 @@
 
 #import "RNZenDeskSupport.h"
 #import <ZendeskSDK/ZendeskSDK.h>
+#import <ZendeskProviderSDK/ZendeskProviderSDK.h>
+
 @implementation RNZenDeskSupport
 
 RCT_EXPORT_MODULE();
@@ -21,6 +23,7 @@ RCT_EXPORT_METHOD(initialize:(NSDictionary *)config){
     NSString *appId = [RCTConvert NSString:config[@"appId"]];
     NSString *zendeskUrl = [RCTConvert NSString:config[@"zendeskUrl"]];
     NSString *clientId = [RCTConvert NSString:config[@"clientId"]];
+    
     [[ZDKConfig instance]
      initializeWithAppId:appId
      zendeskUrl:zendeskUrl
@@ -39,7 +42,7 @@ RCT_EXPORT_METHOD(setupIdentity:(NSDictionary *)identity){
             zdIdentity.name = name;
         }
         [ZDKConfig instance].userIdentity = zdIdentity;
-
+        
     });
 }
 
@@ -140,5 +143,38 @@ RCT_EXPORT_METHOD(supportHistory){
         UIViewController *vc = [window rootViewController];
         [ZDKRequests presentRequestListWithViewController:vc];
     });
+}
+
+RCT_EXPORT_METHOD(createRequest:(NSDictionary *)request
+                  createRequestWithResolver:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject) {
+    
+    ZDKCreateRequest *zdRequest = [ZDKCreateRequest new];
+    NSString *subject = [RCTConvert NSString:request[@"subject"]];
+    if (subject != nil) {
+        zdRequest.subject = subject;
+    }
+    NSString *requestDescription = [RCTConvert NSString:request[@"requestDescription"]];
+    if (requestDescription != nil) {
+        zdRequest.requestDescription = requestDescription;
+    }
+    NSArray *tags = [RCTConvert NSArray:request[@"tags"]];
+    if (tags != nil) {
+        zdRequest.tags = tags;
+    }
+    
+    ZDKRequestProvider *provider = [[ZDKRequestProvider alloc] init];
+    [provider createRequest:zdRequest withCallback:^(id result, NSError *error) {
+        if (error) {
+            // Handle the error
+            reject(@"No Ticket", @"Failed to create ticket", error);
+            // Log the error
+            [ZDKLogger e:error.description];
+            
+        } else {
+            // Handle the success
+            resolve(result);
+        }
+    }];
 }
 @end

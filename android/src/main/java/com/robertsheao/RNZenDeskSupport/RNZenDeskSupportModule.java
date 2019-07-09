@@ -7,6 +7,7 @@ package com.robertsheao.RNZenDeskSupport;
 
 import android.content.Intent;
 import android.app.Activity;
+import android.util.Log;
 
 import com.facebook.react.bridge.NativeModule;
 import com.facebook.react.bridge.ReactApplicationContext;
@@ -15,6 +16,8 @@ import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
+import com.facebook.react.bridge.Promise;
+
 import com.zendesk.sdk.feedback.ui.ContactZendeskActivity;
 import com.zendesk.sdk.requests.RequestActivity;
 import com.zendesk.sdk.support.SupportActivity;
@@ -22,7 +25,11 @@ import com.zendesk.sdk.support.ContactUsButtonVisibility;
 import com.zendesk.sdk.model.access.AnonymousIdentity;
 import com.zendesk.sdk.model.access.Identity;
 import com.zendesk.sdk.model.request.CustomField;
+import com.zendesk.sdk.model.request.CreateRequest;
 import com.zendesk.sdk.network.impl.ZendeskConfig;
+import com.zendesk.sdk.network.RequestProvider;
+import com.zendesk.service.ErrorResponse;
+import com.zendesk.service.ZendeskCallback;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,6 +39,8 @@ public class RNZenDeskSupportModule extends ReactContextBaseJavaModule {
   public RNZenDeskSupportModule(ReactApplicationContext reactContext) {
     super(reactContext);
   }
+  private static final String TAG = "RN Zendesk";
+  private Promise innerPromise;
 
   @Override
   public String getName() {
@@ -150,4 +159,49 @@ public class RNZenDeskSupportModule extends ReactContextBaseJavaModule {
     }
   }
 
+  @ReactMethod
+  public void createRequest(
+          ReadableMap request,
+          Promise promise) {
+    try {
+      // Get an instance of the RequestProvider from the ZendeskConfig
+      RequestProvider provider = ZendeskConfig.INSTANCE.provider().requestProvider();
+
+      // Build the request object from the javascript arguments
+      CreateRequest zdRequest = new CreateRequest();
+
+      zdRequest.setSubject(request.getString("subject"));
+      zdRequest.setDescription(request.getString("requestDescription"));
+
+      ArrayList<Object> list = request.getArray("tags").toArrayList();
+      List<String> tagsList = new ArrayList<>(list.size());
+      for (Object object : list) {
+        tagsList.add(object != null ? object.toString() : null);
+      }
+
+      zdRequest.setTags(tagsList);
+
+      innerPromise = promise;
+      // Create thew ZendeskCallback.
+      ZendeskCallback<CreateRequest> callback = new ZendeskCallback<CreateRequest>() {
+        @Override
+        public void onSuccess(CreateRequest createRequest) {
+          Log.d(TAG, "onSuccess: Ticket created!");
+          innerPromise.resolve(createRequest);
+        }
+
+        @Override
+        public void onError(ErrorResponse errorResponse) {
+          Log.d(TAG, "onError: " + errorResponse.getReason());
+          innerPromise.reject("onError", errorResponse.getReason());
+        }
+      } ;
+
+      // Call the provider method
+      provider.createRequest(zdRequest, callback);
+
+    } catch (Exception e) {
+      promise.reject("onException", e.getMessage());
+    }
+  }
 }
