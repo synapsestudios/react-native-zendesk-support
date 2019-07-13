@@ -187,7 +187,7 @@ public class RNZenDeskSupportModule extends ReactContextBaseJavaModule {
         @Override
         public void onSuccess(CreateRequest createRequest) {
           Log.d(TAG, "onSuccess: Ticket created!");
-          innerPromise.resolve(createRequest);
+          innerPromise.resolve(createRequest.getId());
         }
 
         @Override
