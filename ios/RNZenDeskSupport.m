@@ -173,7 +173,16 @@ RCT_EXPORT_METHOD(createRequest:(NSDictionary *)request
             
         } else {
             // Handle the success
-            resolve(result);
+            ZDKDispatcherResponse * payload = result;
+            NSString *data = [[NSString alloc] initWithData:payload.data encoding:NSUTF8StringEncoding];
+            
+            // Deserialize the data JSON string to an NSDictionary
+            NSError *jsonError;
+            NSData *objectData = [data dataUsingEncoding:NSUTF8StringEncoding];
+            NSDictionary *json = [NSJSONSerialization JSONObjectWithData:objectData
+                                                                 options:NSJSONReadingMutableContainers
+                                                                   error:&jsonError];
+            resolve(json);
         }
     }];
 }

@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.app.Activity;
 import android.util.Log;
 
+import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.NativeModule;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContext;
@@ -18,6 +19,7 @@ import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.Promise;
 
+import com.facebook.react.bridge.WritableMap;
 import com.zendesk.sdk.feedback.ui.ContactZendeskActivity;
 import com.zendesk.sdk.requests.RequestActivity;
 import com.zendesk.sdk.support.SupportActivity;
@@ -63,49 +65,49 @@ public class RNZenDeskSupportModule extends ReactContextBaseJavaModule {
   }
 
   @ReactMethod
-    public void setupIdentity(ReadableMap identity) {
-      AnonymousIdentity.Builder builder = new AnonymousIdentity.Builder();
+  public void setupIdentity(ReadableMap identity) {
+    AnonymousIdentity.Builder builder = new AnonymousIdentity.Builder();
 
-      if (identity != null && identity.hasKey("customerEmail")) {
-        builder.withEmailIdentifier(identity.getString("customerEmail"));
-      }
-
-      if (identity != null && identity.hasKey("customerName")) {
-        builder.withNameIdentifier(identity.getString("customerName"));
-      }
-
-      ZendeskConfig.INSTANCE.setIdentity(builder.build());
+    if (identity != null && identity.hasKey("customerEmail")) {
+      builder.withEmailIdentifier(identity.getString("customerEmail"));
     }
+
+    if (identity != null && identity.hasKey("customerName")) {
+      builder.withNameIdentifier(identity.getString("customerName"));
+    }
+
+    ZendeskConfig.INSTANCE.setIdentity(builder.build());
+  }
 
   @ReactMethod
   public void showHelpCenterWithOptions(ReadableMap options) {
     SupportActivityBuilder.create()
-      .withOptions(options)
-      .show(getReactApplicationContext());
+            .withOptions(options)
+            .show(getReactApplicationContext());
   }
 
   @ReactMethod
   public void showCategoriesWithOptions(ReadableArray categoryIds, ReadableMap options) {
     SupportActivityBuilder.create()
-      .withOptions(options)
-      .withArticlesForCategoryIds(categoryIds)
-      .show(getReactApplicationContext());
+            .withOptions(options)
+            .withArticlesForCategoryIds(categoryIds)
+            .show(getReactApplicationContext());
   }
 
   @ReactMethod
   public void showSectionsWithOptions(ReadableArray sectionIds, ReadableMap options) {
     SupportActivityBuilder.create()
-      .withOptions(options)
-      .withArticlesForSectionIds(sectionIds)
-      .show(getReactApplicationContext());
+            .withOptions(options)
+            .withArticlesForSectionIds(sectionIds)
+            .show(getReactApplicationContext());
   }
 
   @ReactMethod
   public void showLabelsWithOptions(ReadableArray labels, ReadableMap options) {
     SupportActivityBuilder.create()
-      .withOptions(options)
-      .withLabelNames(labels)
-      .show(getReactApplicationContext());
+            .withOptions(options)
+            .withLabelNames(labels)
+            .show(getReactApplicationContext());
   }
 
   @ReactMethod
@@ -141,9 +143,9 @@ public class RNZenDeskSupportModule extends ReactContextBaseJavaModule {
     Activity activity = getCurrentActivity();
 
     if(activity != null){
-        Intent callSupportIntent = new Intent(getReactApplicationContext(), ContactZendeskActivity.class);
-        callSupportIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        getReactApplicationContext().startActivity(callSupportIntent);
+      Intent callSupportIntent = new Intent(getReactApplicationContext(), ContactZendeskActivity.class);
+      callSupportIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+      getReactApplicationContext().startActivity(callSupportIntent);
     }
   }
 
@@ -153,9 +155,9 @@ public class RNZenDeskSupportModule extends ReactContextBaseJavaModule {
     Activity activity = getCurrentActivity();
 
     if(activity != null){
-        Intent supportHistoryIntent = new Intent(getReactApplicationContext(), RequestActivity.class);
-        supportHistoryIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        getReactApplicationContext().startActivity(supportHistoryIntent);
+      Intent supportHistoryIntent = new Intent(getReactApplicationContext(), RequestActivity.class);
+      supportHistoryIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+      getReactApplicationContext().startActivity(supportHistoryIntent);
     }
   }
 
@@ -187,7 +189,18 @@ public class RNZenDeskSupportModule extends ReactContextBaseJavaModule {
         @Override
         public void onSuccess(CreateRequest createRequest) {
           Log.d(TAG, "onSuccess: Ticket created!");
-          innerPromise.resolve(createRequest.getId());
+
+          WritableMap map = Arguments.createMap();
+          WritableMap request = Arguments.createMap();
+
+          map.putString("description", createRequest.getDescription());
+          map.putString("id", createRequest.getId());
+          map.putString("email", createRequest.getEmail());
+          map.putString("subject", createRequest.getSubject());
+
+          request.putMap("request", map);
+
+          innerPromise.resolve(request);
         }
 
         @Override
