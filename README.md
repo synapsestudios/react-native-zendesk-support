@@ -56,7 +56,7 @@ dependencies {
 ...
 include ':app'
 + include ':react-native-zendesk-support'
-+ project(':react-native-zendesk-support').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-zendesk-support/android')
++ project(':react-native-zendesk-support').projectDir = new File(rootProject.projectDir, '../node_modules/@synapsestudios/react-native-zendesk-support/android')
 ```
 
 ### Configure Android (Must Do)
