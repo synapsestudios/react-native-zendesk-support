@@ -1,4 +1,6 @@
-Disclaimer: This package was originally created by Github user robertSheaO and is an unofficial fork. The original repository has been deleted as has the RobertSheaO's profile. The original repository was located at https://github.com/robertsheao/react-native-zendesk-support 
+# Deprecation Warning: This project is no longer maintained or supported.
+
+Disclaimer: This package was originally created by Github user robertSheaO and is an unofficial fork. The original repository has been deleted as has the RobertSheaO's profile. The original repository was located at https://github.com/robertsheao/react-native-zendesk-support
 
 # react-native-zendesk-support
 React Native bridge to Zendesk Support SDK on iOS and Android. This currently only supports using the out of the box views the Zendesk Support SDK provides. At the moment, only anonymous authentication is supported.
